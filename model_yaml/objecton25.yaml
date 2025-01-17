@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: object-workergpu-30500
+  labels:
+    app: object
+spec:
+  nodeSelector:
+    kubernetes.io/hostname : workergpu
+  containers:
+  - name: object
+    image: harbor.pdc.tw/arha/object:latest
+    ports:
+    - containerPort: 7000
+      hostPort: 30500
+    resources:
+      limits:
+        nvidia.com/gpu: 1

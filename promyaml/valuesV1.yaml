@@ -1,0 +1,13 @@
+prometheus:
+  prometheusSpec: 
+    serviceMonitorSelectorNilUseHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    ruleSelector: 
+      matchExpressions: 
+        - key: prometheus
+          operator: In
+          values:
+          - prom-rules
+    scrapeInterval : 10s
+    evaluationInterval : 5s

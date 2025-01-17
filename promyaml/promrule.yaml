@@ -1,0 +1,49 @@
+apiVersion:  monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: prom-rules
+    role: alert-rules
+  name: prometheus-rules
+spec:
+  groups:
+    - name : worker-pod-status
+      rules:
+      - alert : WorkerPodNotRunning
+        expr: kube_pod_status_phase{phase="Running",namespace="server-test"}==0  and kube_pod_status_phase{phase ="Pending",namespace="server-test"}== 0
+        for: 3s
+        labels:
+          severity: critical
+        annotations:
+          description: Pod is not running or pending.
+          summary: Pod is not running or pending.
+    - name: worker-node-status
+      rules:
+      - alert : WorkerNodeNotReady
+        expr: kube_node_status_condition{condition='Ready',status='true',node!~'master|worker1'} == 0
+        for: 3s
+        labels:
+          severity: critical
+        annotations:
+          description: Node is not ready.
+          summary: Node is not ready.
+    - name: worker-pod-restart-twice
+      rules:
+      - alert : WorkerPodRestartTwice
+        expr: kube_pod_container_status_restarts_total{namespace='server-test'} >= 2
+        for: 1s
+        labels:
+          severity: critical
+        annotations:
+          description: Pod crash.
+          summary: Pod crash.
+    - name : alertmanager-test
+      rules:
+      - alert : alertmanager-testing
+        expr: kube_pod_status_phase{phase="Running",namespace="server-test"}==1
+        for: 3s
+        labels:
+          severity: critical
+        annotations:
+          description: alertmanager
+          summary: alertmanager

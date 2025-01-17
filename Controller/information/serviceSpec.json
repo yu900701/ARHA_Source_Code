@@ -1,0 +1,26 @@
+[
+    {
+        "serviceType": "gesture",
+        "frequencyLimit": [
+            5,
+            3
+        ],
+        "workAbility":{
+            "workergpu" : 10,
+            "workergpu2" : 10
+        },
+        "gpuMemoryRequest" : 3 
+    },
+    {
+        "serviceType": "object",
+        "frequencyLimit": [
+            5,
+            3
+        ],
+        "workAbility":{
+            "workergpu" : 10,
+            "workergpu2" : 10
+        },
+        "gpuMemoryRequest" : 3 
+    }
+]

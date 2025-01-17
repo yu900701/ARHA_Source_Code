@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gesture-workergpu2-30503
+  labels:
+    app: gesture
+spec:
+  nodeSelector:
+    kubernetes.io/hostname : workergpu2
+  containers:
+  - name: gesture
+    image: harbor.pdc.tw/arha/gesture:latest
+    ports:
+    - containerPort: 50051
+      hostPort: 30503
+    resources:
+      limits:
+        nvidia.com/gpu: 1

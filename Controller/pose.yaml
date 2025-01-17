@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pose-detectio
+  labels:
+    app: pose
+spec:
+  containers:
+  - name: pose
+    image: kd123456525/pose:iii
+    ports:
+    - containerPort: 8000
+      hostPort: 30500
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    env:
+    - name: SEND_INTERVAL
+      value: "notdowngrade"
+    - name: IP
+      value: "192.168.88.103"      
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: video
+      mountPath: /dev/video0
+  volumes:
+  - name: video
+    hostPath:
+      path: /dev/video0

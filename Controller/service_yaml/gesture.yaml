@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gesture-workergpu-30501
+  labels:
+    app: gesture
+spec:
+  containers:
+  - name: object
+    image:  harbor.pdc.tw/arha/gesture:latest
+    readinessProbe:
+      tcpSocket:
+        port: 50051
+      initialDelaySeconds: 5
+      periodSeconds: 5
+    ports:
+    - containerPort: 50051
+      hostPort: 30501
+    resources:
+      limits:
+        nvidia.com/gpu: 1

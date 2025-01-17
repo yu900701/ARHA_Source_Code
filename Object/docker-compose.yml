@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  torchserve:
+    build:
+      context: ./torchserve
+    volumes:  # This line should be aligned with 'build'
+      - ./torchserve/model_store:/app/model_store  # Shared folder
+      - ./torchserve/logs:/app/logs  # Shared folder
+    ports:
+      - "8080:8080"  # TorchServe port 8080
+      - "8081:8081"  # TorchServe port 8081
+      - "7000:7000"  # grpc inf
+      - "7001:7001"  # grpc man
+    mem_limit: 4G
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memroy
+  labels:
+    app: object
+spec:
+  containers:
+  - name: object
+    image: kd123456525/object:latest
+    resources:
+      limits:
+        nvidia.com/gpu.memory: 1000

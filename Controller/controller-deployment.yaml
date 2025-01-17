@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-deployment
+  namespace: arha-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: controller
+  template:
+    metadata:
+      labels:
+        app: controller
+    spec:
+      containers:
+        - name: controller
+          image: harbor.pdc.tw/arha/controller:latest
+          ports:
+            - name: controller
+              containerPort: 5000
+          volumeMounts:
+            - name: information
+              mountPath: /app/information
+            - name: logs-volume
+              mountPath: /app/logdir
+        - name: result
+          image: harbor.pdc.tw/arha/result:latest
+          ports:
+            - name: result
+              containerPort: 5001
+          volumeMounts:
+            - name: information
+              mountPath: /app/information
+      volumes:
+        - name: information
+          persistentVolumeClaim:
+            claimName: arha-system-information
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: arha-logs-pvc
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: arha-node-type
+                operator: In
+                values:
+                - controller-node
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
